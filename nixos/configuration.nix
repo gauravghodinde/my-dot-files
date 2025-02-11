@@ -106,11 +106,9 @@
          plugins = [
            "git"
          ];
-        };
-    };
-  };
-
-	
+      };
+   };
+};
 
 
   # Allow unfree packages
@@ -128,36 +126,10 @@
     ncdu
     btop
     spotify
-    git
-    spotify-unwrapped
     spicetify-cli
   ];
 
-  # # Nixpkgs Overlays (Spicetify)
-  # nixpkgs.overlays = let
-  #   spicetify-src = builtins.fetchTarball "https://github.com/spicetify/spicetify-cli/archive/master.tar.gz";
-  #   spicetifyOverlay = self: super: {
-  #     spicetify-cli = super.spicetify-cli.overrideAttrs (old: {
-  #       version = "2.9.9";
-  #       src = builtins.fetchTarball "https://github.com/spicetify/spicetify-cli/archive/refs/tags/v2.9.9.tar.gz";
-  #       postInstall = (old.postInstall or "") + ''
-  #         cp -r ${spicetify-src}/css-map.json $out/bin/css-map.json
-  #       '';
-  #     });
-  #   };
-  # in [ spicetifyOverlay ];
-
-
-  #minecraft
-  services.minecraft = {
-	enable = true;
-	eula = true;
-  }
-
-
-
-
-#  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   boot.supportedFilesystems = [ "ntfs" ];
   # Some programs need SUID wrappers, can be configured further or are
