@@ -110,6 +110,8 @@
    };
 };
 
+	
+
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -126,8 +128,31 @@
     ncdu
     btop
     spotify
-    spicetify-cli
+    git
   ];
+
+
+
+   let
+     # For Flakeless:
+     # spicePkgs = spicetify-nix.packages;
+
+     # With flakes:
+     spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
+   in
+   programs.spicetify = {
+     enable = true;
+     enabledExtensions = with spicePkgs.extensions; [
+       adblockify
+       hidePodcasts
+       shuffle # shuffle+ (special characters are sanitized out of extension names)
+     ];
+     theme = spicePkgs.themes.catppuccin;
+     colorScheme = "mocha";
+   }
+
+
+
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
