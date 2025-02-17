@@ -23,6 +23,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
@@ -55,6 +56,10 @@
     layout = "us";
     variant = "";
   };
+  #bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+ 
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -126,8 +131,22 @@
     ncdu
     btop
     spotify
-    spicetify-cli
+    docker
+    docker-compose
+    tmux
+    gparted
+    git
   ];
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+	enable = true;
+	setSocketVariable = true;
+  };
+#  services.minecraft = {
+#	enable = true;
+#	eula = true;
+ # };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -143,13 +162,13 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+   services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
