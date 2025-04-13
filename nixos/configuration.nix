@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }: 
+{ config, pkgs, inputs, ... }: 
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -171,8 +171,8 @@
     gnumake42
     obsidian
     libclang
-   # ciscoPacketTracer8
-    teamviewer
+    inputs.helix.packages."${pkgs.system}".helix
+ 
     firefox-devedition-bin 
   ];
   services.teamviewer.enable = true;
