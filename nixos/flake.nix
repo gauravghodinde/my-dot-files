@@ -1,42 +1,11 @@
-# {
-#   description = "A simple NixOS flake";
-
-#   inputs = {
-#     # NixOS official package source, using the nixos-24.11 branch here
-#     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-#     helix.url = "github:helix-editor/helix/master";
-  
-#   };
-
-#   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-#     # Please replace my-nixos with your hostname
-#     nixosConfigurations = {
-#       nixos = nixpkgs.lib.nixosSystem {
-#         system = "x86_64-linux";
-#         specialArgs = { inherit inputs; };
-#         modules = [
-#           ./configuration.nix
-#           home-manager.nixosModules.home-manager
-#           {
-#             home-manager.useGlobalPkgs = true;
-#             home-manager.useUserPackages = true;
-#             home-manager.users.gaurav = import ./home.nix;
-#           }
-#         ];
-#       };
-# 	  };
-#   };
-# }
-
-
-
 {
   description = "Your new nix config";
 
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    helix.url = "github:helix-editor/helix/master";
+    #Building from Source
+    #helix.url = "github:helix-editor/helix/master";
 
     # You can access packages and modules from different nixpkgs revs
     # at the same time. Here's an working example:
@@ -85,19 +54,7 @@
     # These are usually stuff you would upstream into home-manager
     homeManagerModules = import ./modules/home-manager;
 
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      # FIXME replace with your hostname
-      your-hostname = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          # > Our main nixos configuration file <
-          ./nixos/configuration.nix
-        ];
-      };
-    };
-   nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         # system = "x86_64-linux";
         specialArgs = { inherit inputs; };

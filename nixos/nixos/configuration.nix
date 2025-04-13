@@ -7,8 +7,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-#      inputs.spicetify-nix.nixosModules.default	
-	    ];
+    ];
 
   # Bootloader.
   #boot.loader.systemd-boot.enable = true;
@@ -22,21 +21,13 @@
             efiSupport            = true;
             fsIdentifier          = "label";
             devices               = [ "nodev" ];
- #           extraEntries = ''
-              #  menuentry "Reboot" {
-             #       reboot
-            #    }
-           #     menuentry "Poweroff" {
-          #          halt
-         #       }
-#         '';
-        };
     };
+  };
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
   # auto mount windows partition / common drive
-   fileSystems."/mnt/backup" = {
+  fileSystems."/mnt/backup" = {
     device = "/dev/disk/by-uuid/96060C32060C1641";
     fsType = "ntfs"; 
     options = [ "defaults" ]; 
@@ -115,8 +106,7 @@
     description = "gaurav";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
+     # thunderbird
     ];
   };
 
@@ -171,28 +161,16 @@
     gnumake42
     obsidian
     libclang
-    inputs.helix.packages."${pkgs.system}".helix
+    #inputs.helix.packages."${pkgs.system}".helix
  
     firefox-devedition-bin 
   ];
+
   services.teamviewer.enable = true;
-#  export NIXPKGS_ALLOW_INSECURE=1  
-#  programs.spicetify =
-#let
-#  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-#in
-#{
- # enable = true;
- # theme = spicePkgs.themes.catppuccin;
-#}
   programs.adb.enable = true;
   virtualisation.docker.enable = true;
   virtualisation.podman.enable = true;
 
-#  services.minecraft = {
-#	enable = true;
-#	eula = true;
- # };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
