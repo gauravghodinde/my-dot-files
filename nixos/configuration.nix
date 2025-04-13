@@ -2,20 +2,46 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
+{ config, pkgs, ... }: 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-    ];
+#      inputs.spicetify-nix.nixosModules.default	
+	    ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  #boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  boot.loader = {
+        grub = {
+            enable                = true;
+            useOSProber           = true;
+            copyKernels           = true;
+           # efiInstallAsRemovable = true;
+            efiSupport            = true;
+            fsIdentifier          = "label";
+            devices               = [ "nodev" ];
+ #           extraEntries = ''
+              #  menuentry "Reboot" {
+             #       reboot
+            #    }
+           #     menuentry "Poweroff" {
+          #          halt
+         #       }
+#         '';
+        };
+    };
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  # auto mount windows partition / common drive
+   fileSystems."/mnt/backup" = {
+    device = "/dev/disk/by-uuid/96060C32060C1641";
+    fsType = "ntfs"; 
+    options = [ "defaults" ]; 
+  };
+
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -59,7 +85,7 @@
   #bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
- 
+  programs.kdeconnect.enable = true; 
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -87,7 +113,7 @@
   users.users.gaurav = {
     isNormalUser = true;
     description = "gaurav";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
@@ -95,7 +121,7 @@
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+#  programs.firefox.enable = true;
   
   # zsh configs
   users.defaultUserShell=pkgs.zsh; 
@@ -110,6 +136,7 @@
          theme = "robbyrussell";
          plugins = [
            "git"
+	   "z"
          ];
       };
    };
@@ -133,16 +160,35 @@
     spotify
     docker
     docker-compose
-    tmux
+    go
     gparted
     git
+    rustup
+    android-tools
+    distrobox
+    fastfetch # good terminal display
+    eza # better ls
+    gnumake42
+    obsidian
+    libclang
+   # ciscoPacketTracer8
+    teamviewer
+    firefox-devedition-bin 
   ];
-
+  services.teamviewer.enable = true;
+#  export NIXPKGS_ALLOW_INSECURE=1  
+#  programs.spicetify =
+#let
+#  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+#in
+#{
+ # enable = true;
+ # theme = spicePkgs.themes.catppuccin;
+#}
+  programs.adb.enable = true;
   virtualisation.docker.enable = true;
-  virtualisation.docker.rootless = {
-	enable = true;
-	setSocketVariable = true;
-  };
+  virtualisation.podman.enable = true;
+
 #  services.minecraft = {
 #	enable = true;
 #	eula = true;
@@ -165,10 +211,10 @@
    services.openssh.enable = true;
 
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
+  # networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
