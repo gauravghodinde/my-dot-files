@@ -4,44 +4,15 @@
 
 { config, pkgs, inputs, ... }: 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-  # Bootloader.
-  #boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader = {
-        grub = {
-            enable                = true;
-            useOSProber           = true;
-            copyKernels           = true;
-           # efiInstallAsRemovable = true;
-            efiSupport            = true;
-            fsIdentifier          = "label";
-            devices               = [ "nodev" ];
-    };
-  };
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-  # auto mount windows partition / common drive
-  fileSystems."/mnt/backup" = {
-    device = "/dev/disk/by-uuid/96060C32060C1641";
-    fsType = "ntfs"; 
-    options = [ "defaults" ]; 
-  };
-
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-  
-
+  imports = [
+    ./hardware-configuration.nix
+    ../modules/nixos/boot.nix
+    ../modules/nixos/programs.nix
+    ../modules/nixos/networking.nix
+    # ./modules/nixos/system.nix
+    ../modules/nixos/users.nix
+    #./modules/nixos/desktop.nix
+  ];
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
 
@@ -96,85 +67,13 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.gaurav = {
-    isNormalUser = true;
-    description = "gaurav";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [
-     # thunderbird
-    ];
-  };
-
-  # Install firefox.
-#  programs.firefox.enable = true;
-  
   # zsh configs
   users.defaultUserShell=pkgs.zsh; 
-  programs = {
-   zsh = {
-      enable = true;
-      autosuggestions.enable = true;
-      zsh-autoenv.enable = true;
-      syntaxHighlighting.enable = true;
-      ohMyZsh = {
-         enable = true;
-         theme = "robbyrussell";
-         plugins = [
-           "git"
-	   "z"
-         ];
-      };
-   };
-};
-
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    vscode
-    kitty
-    gcc
-    zsh
-    ncdu
-    btop
-    spotify
-    docker
-    docker-compose
-    go
-    gparted
-    git
-    rustup
-    android-tools
-    distrobox
-    fastfetch # good terminal display
-    eza # better ls
-    gnumake42
-    obsidian
-    libclang
-    #inputs.helix.packages."${pkgs.system}".helix
- 
-    firefox-devedition-bin 
-  ];
-
-  services.teamviewer.enable = true;
-  programs.adb.enable = true;
-  virtualisation.docker.enable = true;
-  virtualisation.podman.enable = true;
-
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  boot.supportedFilesystems = [ "ntfs" ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -186,7 +85,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-   services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ 80 443 22 ];
