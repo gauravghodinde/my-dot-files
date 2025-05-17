@@ -8,7 +8,7 @@
     zsh
     ncdu
     btop
-    spotify
+   # spotify
     docker
     docker-compose
     go

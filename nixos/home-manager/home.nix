@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # TODO please change the username & home directory to your own
-  home.username = "gaurav";
-  home.homeDirectory = "/home/gaurav";
+  home.username = "gixx";
+  home.homeDirectory = lib.mkForce "/home/gixx";
 
   # link the configuration file in current directory to the specified location in home directory
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
@@ -31,7 +31,10 @@
 
     # utils
     eza # A modern replacement for ‘ls’
-
+    #minecraft launcher
+    prismlauncher
+    blender
+    cloudflared
     # networking tools
     mtr # A network diagnostic tool
     dnsutils  # `dig` + `nslookup`

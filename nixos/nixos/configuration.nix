@@ -2,7 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }: 
+{ config, pkgs, inputs, ... }:
+let 
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
+in 
 {
   imports = [
     ./hardware-configuration.nix
@@ -11,6 +14,7 @@
     ../modules/nixos/networking.nix
     # ./modules/nixos/system.nix
     ../modules/nixos/users.nix
+    #spicetify-nix.nixosModules.spicetify
     #./modules/nixos/desktop.nix
   ];
   # Set your time zone.
@@ -86,6 +90,24 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.tailscale.enable = true;
+  
+  networking.firewall.allowedTCPPorts = [ 25565 ]; # Minecraft port
+  # Spicetify configuration
+  programs.spicetify = {
+    enable = true;
+    enabledExtensions = with spicePkgs.extensions; [
+     adblockify
+     hidePodcasts
+     shuffle
+    ];
+    #enabledCustomApps = with spicePkgs.customApps; [
+    # marketplace
+    #];
+ #   theme = spicePkgs.themes.catppuccin;
+#    colorScheme = "lucid";
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ 80 443 22 ];

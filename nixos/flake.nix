@@ -17,12 +17,16 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Spicetify-nix
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix/24.11";
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
+    spicetify-nix,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -57,17 +61,19 @@
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         # system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
         modules = [
          ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
+    	  spicetify-nix.nixosModules.spicetify
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.gaurav = import ./home-manager/home.nix;
+	   # home-manager.users.gixx.home.homeDirectory = lib.mkForce "/home/gixx";
+            home-manager.users.gixx = import ./home-manager/home.nix;
             home-manager.backupFileExtension = "backup";
           }
         ];
+	specialArgs = { inherit inputs; };
       };
 	  };
 

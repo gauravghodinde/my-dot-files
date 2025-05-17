@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
-  users.users.gaurav = {
+  users.users.gixx = {
     isNormalUser = true;
-    description = "gaurav";
+    description = "gixx";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [ ];
   };
